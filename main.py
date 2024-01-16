@@ -11,10 +11,10 @@ async def root():
 
 @app.get("/contributors/{package_name}")
 def get_package_contributors(package_name: str):
-    get_contributors(package_name)
+    contributors = get_contributors(package_name)
     return {
         "package": package_name,
-        "contributors": ["dummy contributor1", "dummy contributor2"],
+        "contributors": contributors,
     }
 
 
