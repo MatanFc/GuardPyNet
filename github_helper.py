@@ -18,25 +18,30 @@ def get_github_link(package_name: str) -> str:
         print(f"Error: {response.status_code}")
 
 
-def get_contributors(package_name: str) -> str:
+def get_contributors(package_name: str) -> dict:
     github_link = get_github_link(package_name)
     owner, repo = github_link.split("/")[-2:]
 
-    # GitHub API endpoint for retrieving contributors
     api_url = f"https://api.github.com/repos/{owner}/{repo}/contributors"
+    all_contributors = []
 
-    # Make a request to the GitHub API
-    response = requests.get(api_url)
+    page = 1
+    while True:
+        params = {"page": page}
+        response = requests.get(api_url, params=params)
 
-    # Check if the request was successful (status code 200)
-    if response.status_code == 200:
-        # Parse the JSON response
-        contributors = response.json()
+        if response.status_code == 200:
+            contributors = response.json()
+            if not contributors:
+                break
+            all_contributors.extend(contributors)
+            page += 1
+        else:
+            print(f"Error: {response.status_code}")
+            break
 
-        # Extract and print contributor information
-        for contributor in contributors:
-            login = contributor["login"]
-            contributions = contributor["contributions"]
-            print(f"Contributor: {login}, Contributions: {contributions}")
-    else:
-        print(f"Error: {response.status_code}")
+    for contributor in all_contributors:
+        id = contributor["id"]
+        login = contributor["login"]
+        contributions = contributor["contributions"]
+        print(f"ID: {id}, Contributor: {login}, Contributions: {contributions}")
