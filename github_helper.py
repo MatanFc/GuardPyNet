@@ -39,9 +39,5 @@ def get_contributors(package_name: str) -> dict:
         else:
             print(f"Error: {response.status_code}")
             break
-
-    for contributor in all_contributors:
-        id = contributor["id"]
-        login = contributor["login"]
-        contributions = contributor["contributions"]
-        print(f"ID: {id}, Contributor: {login}, Contributions: {contributions}")
+    # TODO: return list of my entities, check if already existing and update it if necessary
+    return all_contributors
