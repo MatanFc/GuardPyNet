@@ -9,6 +9,7 @@ class Package(BaseModel):
     version: str
     last_updated: datetime
     dependencies: list
+    github_url: str
 
 
 class Contributor(BaseModel):
