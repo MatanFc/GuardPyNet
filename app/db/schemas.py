@@ -11,9 +11,15 @@ class Package(BaseModel):
     dependencies: list
     github_url: str
 
+    class Config:
+        from_attributes = True
+
 
 class Contributor(BaseModel):
     id: UUID
     login: str
     github_id: str
     contributions: list[Package]
+
+    class Config:
+        from_attributes = True

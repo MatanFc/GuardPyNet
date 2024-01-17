@@ -1,9 +1,19 @@
 from fastapi import FastAPI
-from github_helper import get_contributors, get_github_link
+from github_helper import get_contributors
 from dotenv import load_dotenv
+from contextlib import asynccontextmanager
+from db.config import engine, Base, get_db
 
 load_dotenv()
-app = FastAPI()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    Base.metadata.create_all(bind=engine)
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/")
